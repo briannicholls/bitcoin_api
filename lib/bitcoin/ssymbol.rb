@@ -28,4 +28,16 @@ class Ssymbol
     Ssymbol.new_from_object(data)
   end
 
+  def display_details
+    puts <<-DOC
+    ID: #{@id}
+    Base Currency: #{@baseCurrency} || Quote Currency: #{@quoteCurrency}
+    Quantity Increment: #{@quantityIncrement} || Tick Size: #{@tickSize}
+    Take Liquidity Rate: #{@takeLiquidityRate} || Provide Liquidity Rate: #{@provideLiquidityRate}
+    Fee Currency: #{@feeCurrency}
+
+    DOC
+
+  end
+
 end

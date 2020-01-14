@@ -18,6 +18,18 @@ class Display
     }
   end
 
+  def self.list_order_book(orderbook)
+    orderbook.each_with_index{ |order, i|
+      puts "#{(i+1).to_s.rjust(4)}. #{order.timestamp.strftime("%Y-%m-%d %H:%M:%S")}:  #{order.side.upcase} - Order Size: #{order.size.rjust(12)}, Price:  #{order.price.rjust(4)}"
+    }
+  end
+
+  def self.list_candles(candles)
+    candles.each_with_index{ |candle, i|
+      puts "#{(i+1).to_s.rjust(4)}. #{candle.timestamp} [#{candle.open.rjust(7)} -> #{candle.close.rjust(7)}] [#{candle.min.rjust(7)} - #{candle.max.rjust(7)}] vol: #{candle.volume.rjust(11)}"
+    }
+  end
+
   private
   # input array of hashes, and desired displayed attribute (string key)
   def self.numerize(array, attribute = nil)

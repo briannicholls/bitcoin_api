@@ -8,29 +8,29 @@ class CLI
 
   def menu
     @selection = nil
-    puts " "
+    puts " [MAIN MENU] "
     puts " What would you like to do?"
     puts "[1] Select Symbol"
     #puts "[2] Select Currency"
     #puts "[3] Select Ticker"
-    puts "[4] User Dashboard (Auth Needed)"
+    #puts "[4] User Dashboard (Auth Needed)"
     puts " "
     input = gets.strip
     if input == "1"
       @list = Display.list_by_id(Ssymbol.all)
       @selection = choose(@list)
       puts ""
-      puts "Selected symbol #{@selection.id}"
+      puts "Selected symbol: #{@selection.id}"
       puts ""
-      symbol_menu
+      symbol_menu(@selection)
     elsif input == '2'
-      @selection = choose(Currency.all)
+      choose(Currency.all)
       puts ""
       puts "Selected currency #{@selection.id}"
       puts ""
       menu
     elsif input == '3'
-      @selection = choose(Ticker.all)
+      choose(Ticker.all)
       puts ""
       puts "Selected ticker #{@selection.symbol}"
       puts ""
@@ -41,51 +41,47 @@ class CLI
       exit
     else
       puts "Invalid command. Try again."
+      menu
     end
-
-    menu if !@selection
-
   end
 
-  def symbol_menu
+  def symbol_menu(symbol)
+    puts symbol.display_details
     puts "Type 'exit' to quit"
     puts "[0] Back"
-    puts "[1] View Trades for Symbol #{@selection.id}"
-    #puts "[2] View Order Book for Selection"
-    #puts "[3] View Candles for Selection"
+    puts "[1] View Trades for #{symbol.id}"
+    puts "[2] View Order Book for #{symbol.id}"
+    puts "[3] View Candles for #{symbol.id}"
 
     input = gets.strip
     if input == '0'
-      @selection = nil
       menu
     elsif input == '1'
-      @list = Trade.all(@selection.id)
-      Display.list_trades(@list)
-      trade_menu
+      trade_menu(Trade.all(symbol.id))
     elsif input == '2'
-      view_order_book
+      order_book_menu(OrderBook.all(symbol.id))
     elsif input == '3'
-      view_candles
+      candles_menu(Candle.all(symbol.id))
     elsif input == 'exit'
       exit
     else
       puts 'nope'
+      symbol_menu(symbol)
     end
-    symbol_menu
   end
 
   def iti(input)
-    input - 1
+    input.to_i - 1
   end
 
   def choose(array)
-    #@selection = nil
-    puts "Make a selection"
-    choice = gets.strip.to_i
-    if choice != 0 && choice < array.length
-      @selection = array[iti(choice)]
-    elsif choice == 0
-      @selection = nil
+    puts "Make a selection, or press return to go back."
+    choice = gets
+    if choice.to_i != 0 && choice.to_i <= array.length
+      array[iti(choice)]
+    elsif choice == "\n"
+      return -1
+    elsif choice == '0'
       menu
     else
       puts "Invalid selection. Try again"
@@ -97,14 +93,61 @@ class CLI
     puts "Nothing here yet!"
   end
 
-  def trade_menu
-    puts "[0] Main Menu"
+  def trade_menu(trades)
+    Display.list_trades(trades)
+    submenu_options
+
+    loop do
+      selection = choose(trades)
+      case selection
+      when -1
+        symbol_menu(@selection)
+      when 'list'
+        trade_menu(trades)
+      end
+      selection.display_details
+    end
+    trade_menu(trades)
+  end
+
+  def order_book_menu(orders)
+    Display.list_order_book(orders)
+    submenu_options
+
+    loop do
+      selection = choose(orders)
+      case selection
+      when -1
+        symbol_menu(@selection)
+      when 'list'
+        order_book_menu(orders)
+      end
+      selection.display_details
+    end
+    order_book_menu(orders)
+  end
+
+  def candles_menu(candles)
+    Display.list_candles(candles)
+    submenu_options
+
+    loop do
+      selection = choose(candles)
+      case selection
+      when -1
+        symbol_menu(@selection)
+      when 'list'
+        candles_menu(candles)
+      end
+    end
+    selection.display_details
+  end
+
+  def submenu_options
     puts "Type 'exit' to quit"
-    puts "Select Trade to View Details"
+    puts "[0] Main Menu"
+    puts "Select Entry to View Details"
     puts ""
-    @selection = choose(@list)
-    @selection.display_details
-    trade_menu
   end
 
 end
