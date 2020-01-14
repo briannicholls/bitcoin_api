@@ -25,4 +25,13 @@ class Currency
     c
   end
 
+  def display_details
+    puts <<-DOC
+      #{@id} (#{@fullName})
+      Cryptocurrency?: #{@crypto.to_s}
+      Delisted?: #{@delisted.to_s}
+      Pay-Out Fee: #{@payoutFee} #{@id}
+    DOC
+  end
+
 end
