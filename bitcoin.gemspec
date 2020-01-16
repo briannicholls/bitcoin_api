@@ -1,12 +1,13 @@
 require_relative 'lib/bitcoin/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "bitcoin"
+  spec.name          = "bitcoin-api"
   spec.version       = Bitcoin::VERSION
   spec.authors       = ["Brian Nicholls"]
   spec.email         = ["nichol88@gmail.com"]
 
-  spec.summary       = %q{bitcoin.com trading interface}
+  spec.summary       = %q{bitcoin.com API interface}
+  spec.homepage      = "https://github.com/nichol88/bitcoin_api"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
 

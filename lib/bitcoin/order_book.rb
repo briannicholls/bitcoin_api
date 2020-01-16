@@ -1,5 +1,4 @@
-class OrderBook
-  BASE = "https://api.exchange.bitcoin.com/api/2"
+class Bitcoin::OrderBook
 
   attr_accessor :side, :price, :size, :timestamp, :limit, :symbol
 
@@ -9,10 +8,10 @@ class OrderBook
   #         Set 0 to view full list of Order Book levels.
 
   def self.new_from_object(object)
-    o = OrderBook.new
-    o.size = object['size']
+    o = Bitcoin::OrderBook.new
+    o.size = object['size'].to_f
     o.side = object[:side]
-    o.price = object['price']
+    o.price = object['price'].to_f
     o.timestamp = Time.parse(object['timestamp'])
     o.limit = object['limit']
     o.symbol = object[:symbol]
@@ -36,7 +35,7 @@ class OrderBook
     }
 
     [ask_orders, bid_orders].flatten!.map{|order|
-      OrderBook.new_from_object(order)
+      Bitcoin::OrderBook.new_from_object(order)
     }
   end
 

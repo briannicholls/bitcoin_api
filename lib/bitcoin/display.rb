@@ -20,13 +20,19 @@ class Display
 
   def self.list_order_book(orderbook)
     orderbook.each_with_index{ |order, i|
-      puts "#{(i+1).to_s.rjust(4)}. #{order.timestamp.strftime("%Y-%m-%d %H:%M:%S")}:  #{order.side.upcase} - Order Size: #{order.size.rjust(12)}, Price:  #{order.price.rjust(4)}"
+      puts "#{(i+1).to_s.rjust(4)}. #{order.timestamp.strftime("%Y-%m-%d %H:%M:%S")}:  #{order.side.upcase} - Order Size: #{order.size.to_s.rjust(12)}, Price: #{order.price.to_s.rjust(12)}"
     }
   end
 
   def self.list_candles(candles)
     candles.each_with_index{ |candle, i|
-      puts "#{(i+1).to_s.rjust(4)}. #{candle.timestamp} [#{candle.open.rjust(7)} -> #{candle.close.rjust(7)}] [#{candle.min.rjust(7)} - #{candle.max.rjust(7)}] vol: #{candle.volume.rjust(11)}"
+      puts "#{(i+1).to_s.rjust(4)}. #{candle.timestamp} [#{candle.open.rjust(11)} -> #{candle.close.rjust(11)}] [#{candle.min.rjust(11)} - #{candle.max.rjust(11)}] vol: #{candle.volume.rjust(11)}"
+    }
+  end
+
+  def self.list_tickers(tickers)
+    tickers.each_with_index{ |ticker, i|
+      puts "#{(i+1).to_s.rjust(4)}. #{ticker.symbol}"
     }
   end
 

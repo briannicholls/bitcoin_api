@@ -1,19 +1,17 @@
-class Candle
-  BASE = "https://api.exchange.bitcoin.com/api/2"
+class Bitcoin::Candle
 
   attr_accessor :timestamp, :open, :close, :min, :max, :volume, :volumeQuote
-        #:period, :sort, :from, :till, :limit, :offset
 
   def self.all(symbol)
     data = JSON.parse(RestClient.get("#{BASE}/public/candles/#{symbol}?limit=1000"))
     data.map{ |candle|
-      Candle.new_from_object(candle)
+      Bitcoin::Candle.new_from_object(candle)
     }
   end
 
   def self.new_from_object(object)
-    c = Candle.new
-    c.timestamp = object['timestamp']
+    c = Bitcoin::Candle.new
+    c.timestamp = Time.parse(object['timestamp'])
     c.open = object['open']
     c.close = object['close']
     c.min = object['min']
@@ -32,4 +30,6 @@ class Candle
 
     DOC
   end
+
+
 end

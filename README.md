@@ -1,8 +1,13 @@
 # Bitcoin
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/bitcoin`. To experiment with that code, run `bin/console` for an interactive prompt.
+This is a CLI using the bitcoin.com exchange API to view market data and provide limited analysis.
 
-TODO: Delete this and the text above, and describe your gem
+Planned features:
+  - More advanced analytical functions
+  - Support for trading
+  - Support for multiple exchanges
+  - Algotrading, arbitrage
+  - UI
 
 ## Installation
 
@@ -22,7 +27,9 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Run `bin/console` to play around, or `bin/bitcoin` to start the CLI.
+
+
 
 ## Development
 
@@ -32,7 +39,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/bitcoin. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/bitcoin/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/nichol88/bitcoin_api. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/bitcoin/blob/master/CODE_OF_CONDUCT.md).
 
 
 ## License

@@ -1,168 +1,263 @@
-class CLI
+class Bitcoin::CLI
 
   def initialize
-    # get data
     puts "Welcome!"
     menu
   end
 
-  def menu
-    @selection = nil
-    puts "     [MAIN MENU] "
-    puts "What would you like to do?"
-    puts "[1] Select Symbol"
-    puts "[2] View Currency Information"
-    puts "[3] Select Ticker"
-    #puts "[4] User Dashboard (Auth Needed)"
+  def main_menu_display
+    puts ""
+    puts "Type 'exit' to quit"
+    puts ""
+    puts "***** [MAIN MENU] *****"
+    puts "* What would you like to do?"
+    puts "* [1] Select Symbol"
+    puts "* [2] View Currency Information"
+    puts "* [3] View Tickers"
+    # puts "[4] User Dashboard (Auth Needed)"
     puts " "
+  end
+
+  def menu
+    # Display options
+    main_menu_display
+
     input = gets.strip
-    if input == "1"
-      symbol_menu
-    elsif input == '2'
-      currency_menu
-    elsif input == '3'
-      choose(Ticker.all)
-      puts ""
-      puts "Selected ticker #{@selection.symbol}"
-      puts ""
-      menu
-    elsif input == '4'
-      user_menu
-    elsif input == 'exit'
-      exit
-    else
-      puts "Invalid command. Try again."
-      menu
-    end
+    symbol_menu   if input == '1'
+    currency_menu if input == '2'
+    ticker_menu   if input == '3'
+    user_menu     if input == '4'
+    exit          if input == 'exit'
+
+    puts "Invalid command. Try again."
+    menu
+
   end
 
   def iti(input)
-    input.to_i - 1
+    input.to_i - 1 # input to index
   end
 
+  # input: array to choose from
+  # output: object if choice is valid; -1 if '0', -2 if no choice (only return key is pressed)
   def choose(array)
-    puts "Make a selection, or press return to go back."
+    puts "Make a selection, or press return to show list"
     choice = gets
-    if choice.to_i != 0 && choice.to_i <= array.length
-      array[iti(choice)]
-    elsif choice == "\n"
+    if choice.strip == '0'
+      return -2
+    elsif choice == "\n" || choice.strip == ""
       return -1
-    elsif choice == '0'
-      menu
+    elsif choice.strip == '00'
+      return -3
+    elsif choice.strip != '0' && choice.to_i <= array.length
+      return array[iti(choice)]
     else
       puts "Invalid selection. Try again"
       choose(array)
     end
   end
 
+  ### TODO: USER SUBMENU ###
   def user_menu
     puts "Nothing here yet!"
   end
 
-  # SYMBOL SUBMENUS
+  ### SYMBOL SUBMENUS ###
   def symbol_menu(symbol = nil)
-    if !@symbol
-      list = Display.list_by_id(Ssymbol.all)
-      @symbol = choose(list)
-      menu if symbol == -1
+
+    # display list & get symbol if it hasn't been selected yet
+    if !symbol
+      list = Bitcoin::Display.list_by_id(Bitcoin::Ssymbol.all)
+      selection = choose(list) #
+      menu if selection == -2
+      symbol_menu if selection == -1
+      symbol = selection
     end
 
-    puts @symbol.display_details
-    puts "Type 'exit' to quit"
-    puts "[0] Main Menu"
-    puts "[1] View Trades for #{@symbol.id}"
-    puts "[2] View Order Book for #{@symbol.id}"
-    puts "[3] View Candles for #{@symbol.id}"
+    # display menu options for a symbol
+    symbol_menu_display(symbol)
 
+    # route choice to appropriate submenu
     input = gets.strip
-    if input == '0'
-      menu
-    elsif input == '1'
-      trade_menu(Trade.all(@symbol.id))
-    elsif input == '2'
-      order_book_menu(OrderBook.all(@symbol.id))
-    elsif input == '3'
-      candles_menu(Candle.all(@symbol.id))
-    elsif input == 'exit'
-      exit
-    else
-      puts 'nope'
-      symbol_menu
-    end
-  end
-  def trade_menu(trades)
-    Display.list_trades(trades)
-    submenu_options
+    menu                    if input == '0'
+    trade_menu(symbol)      if input == '1'
+    order_book_menu(symbol) if input == '2'
+    candles_menu(symbol)    if input == '3'
+    analysis_menu(symbol)   if input == '4'
+    exit                    if input == 'exit'
+    puts 'nope'
+    symbol_menu(symbol) # menu loop after action
 
-    loop do
-      selection = choose(trades)
-      case selection
-      when -1
-        symbol_menu(@symbol)
-      when 'list'
-        trade_menu(trades)
-      end
-      selection.display_details
-    end
-    trade_menu(trades)
   end
-  def order_book_menu(orders)
-    Display.list_order_book(orders)
-    submenu_options
 
-    loop do
-      selection = choose(orders)
-      case selection
-      when -1
-        symbol_menu(@symbol)
-      when 'list'
-        order_book_menu(orders)
-      end
-      selection.display_details
-    end
-    order_book_menu(orders)
+  def symbol_menu_display(symbol)
+    puts symbol.display_details
+    puts ""
+    puts "Type 'exit' to quit"
+    puts ""
+    puts "***** [Symbol Menu] #{symbol.id} *****"
+    puts "* [0] Main Menu"
+    puts "* [1] View Trades for #{symbol.id}"
+    puts "* [2] View Order Book for #{symbol.id}"
+    puts "* [3] View Candles for #{symbol.id}"
+    puts "* [4] Analysis Mode"
   end
-  def candles_menu(candles)
-    Display.list_candles(candles)
-    submenu_options
 
-    loop do
-      selection = choose(candles)
-      case selection
-      when -1
-        symbol_menu(@symbol)
-      when 'list'
-        candles_menu(candles)
-      end
+  def trade_menu(symbol, trades_array = nil)
+    if !trades_array
+      # list all trades for symbol if first time
+      trades = Bitcoin::Trade.all(symbol.id)
+      Bitcoin::Display.list_trades(trades)
     end
+
+    trade_menu_display
+
+    # User may either: select a trade to view, return to Main Menu, Symbol Menu,
+    #   or loop method to show list again
+    selection = choose(trades)
+    trade_menu(symbol)  if selection == -1
+    menu                if selection == -2
+    symbol_menu(symbol) if selection == -3
+
+    selection.display_details
+    # Loop method without re-listing if action performed sucessfully
+    trade_menu(symbol, trades)
+  end
+
+  def trade_menu_display
+    puts ""
+    puts " Type 'exit' to quit"
+    puts ""
+    puts "***** [Trades Menu] *****"
+    puts "* [0] Main Menu"
+    puts "* [00] Symbol Menu"
+    puts "* [#] Select Entry to View Details"
+    puts ""
+  end
+
+  def order_book_menu(symbol, orders = nil)
+    orders = Bitcoin::OrderBook.all(symbol.id)
+    Bitcoin::Display.list_order_book(orders)
+
+    order_book_menu_display
+
+    selection = choose(orders)
+    order_book_menu(symbol) if selection == -1
+    menu                    if selection == -2
+    symbol_menu(symbol)     if selection == -3
+
+    selection.display_details
+
+    order_book_menu(symbol, orders)
+  end
+
+  def order_book_menu_display
+    puts ""
+    puts "  Type 'exit' to quit"
+    puts ""
+    puts "***** [Order Book Menu] *****"
+    puts "* [0] Main Menu"
+    puts "* [00] Symbol Menu"
+    puts "* [#] Select Entry to View Details"
+    puts ""
+  end
+
+  def candles_menu(symbol, candles = nil)
+    if !candles
+      candles = Bitcoin::Candle.all(symbol.id)
+      Bitcoin::Display.list_candles(candles)
+    end
+
+    candles_menu_display
+
+    selection = choose(candles)
+    candles_menu(symbol) if selection == -1
+    menu                 if selection == -2
+    symbol_menu(symbol)  if selection == -3
+
     selection.display_details
   end
-  def submenu_options
+
+  def candles_menu_display
     puts ""
-    puts "Type 'exit' to quit"
-    puts "[0] Main Menu"
-    puts "Select Entry to View Details"
+    puts "  Type 'exit' to quit"
+    puts ""
+    puts "***** [Candles Menu] *****"
+    puts "* [0] Main Menu"
+    puts "* [00] Symbol Menu"
+    puts "* [#] Select Entry to View Details"
     puts ""
   end
 
-
-  #CURRENCY SUBMENUS
-  def currency_menu
-    list = Display.list_by_id(Currency.all)
-    submenu_options
-    selection = choose(list)
-    if selection == -1
-      currency_menu
-    elsif selection == '0'
-      menu
-    else
-      selection.display_details
+  ### CURRENCY SUBMENU ###
+  def currency_menu(list = nil)
+    if !list
+      list = Bitcoin::Display.list_by_id(Bitcoin::Currency.all)
     end
-    currency_menu
+    currency_menu_display
+    selection = choose(list)
+    currency_menu if selection == -1
+    menu          if selection == -2
+
+    selection.display_details
+    currency_menu(list)
   end
 
-  #TICKER SUBMENUS
-  def ticker_menu
-
+  def currency_menu_display
+    puts ""
+    puts "  Type 'exit' to quit"
+    puts ""
+    puts "***** [Currency Menu] *****"
+    puts "* [0] Main Menu"
+    puts "* [#] Select Entry to View Details"
+    puts ""
   end
+
+  ### TICKER SUBMENU ###
+  def ticker_menu(list = nil)
+    if !list
+      list = Bitcoin::Display.list_tickers(Bitcoin::Ticker.all)
+    end
+
+    ticker_menu_display
+
+    selection = choose(list)
+    ticker_menu if selection == -1
+    menu        if selection == -2
+
+    selection.display_details
+    ticker_menu(list)
+  end
+
+  def ticker_menu_display
+    puts ""
+    puts "  Type 'exit' to quit"
+    puts ""
+    puts "***** [Ticker Menu] *****"
+    puts "* [0] Main Menu"
+    puts "* [#] Select Entry to View Details"
+    puts ""
+  end
+
+  ### ANALYSIS SUBMENU ###
+  def analysis_menu(symbol)
+
+    analysis_menu_display(symbol)
+
+    input = gets.strip
+    menu if input == '0'
+    Analyzer.analyze_trades symbol if input == '1'
+    analysis_menu(symbol)
+  end
+
+  def analysis_menu_display(symbol)
+    puts ""
+    puts "  Type 'exit' to quit"
+    puts ""
+    puts "///// [Analysis Mode - #{symbol.id}] /////"
+    puts "/ [0] Main Menu"
+    puts "/ [1] Analyze Trades Within Range..."
+    puts ""
+  end
+
 end

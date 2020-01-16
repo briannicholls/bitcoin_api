@@ -9,13 +9,14 @@ RSpec.describe Bitcoin do
 end
 
 RSpec.describe Currency do
-  it "has an @id" do
+  it "has an id" do
     expect(Currency.new('ETH').id).to eq('ETH')
   end
+
 end
 
 RSpec.describe Ssymbol do
-  it "has an @id" do
+  it "has an id" do
     expect(Ssymbol.new('BTCUSD').id).to eq('BTCUSD')
   end
 end

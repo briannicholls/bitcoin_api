@@ -1,17 +1,17 @@
-class Ssymbol
-  BASE = "https://api.exchange.bitcoin.com/api/2"
+class Bitcoin::Ssymbol
+
   attr_accessor :id, :baseCurrency, :quoteCurrency, :quantityIncrement, :tickSize,
         :takeLiquidityRate, :provideLiquidityRate, :feeCurrency
 
   def self.all
     data = JSON.parse(RestClient.get("#{BASE}/public/symbol"))
     data.map{ |ssymbol|
-      Ssymbol.new_from_object(ssymbol)
+      Bitcoin::Ssymbol.new_from_object(ssymbol)
     }
   end
 
   def self.new_from_object(data)
-    s = Ssymbol.new
+    s = Bitcoin::Ssymbol.new
     s.id = data['id']
     s.baseCurrency = data['baseCurrency']
     s.quoteCurrency = data['quoteCurrency']
@@ -23,9 +23,9 @@ class Ssymbol
     s
   end
 
-  def self.new_from_symbol_name(symbol)
-    data = JSON.parse(RestClient.get("#{BASE}/public/symbol/#{symbol}"))
-    Ssymbol.new_from_object(data)
+  def self.new_from_symbol_name(symbol_name)
+    data = JSON.parse(RestClient.get("#{BASE}/public/symbol/#{symbol_name}"))
+    Bitcoin::Ssymbol.new_from_object(data)
   end
 
   def display_details
