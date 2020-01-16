@@ -2,6 +2,8 @@
 
 This is a CLI using the bitcoin.com exchange API to view market data and provide limited analysis.
 
+CLI Demo video: https://youtu.be/z5k0Hnl88eA
+
 Planned features:
   - More advanced analytical functions
   - Support for trading
