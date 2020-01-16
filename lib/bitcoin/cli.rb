@@ -246,7 +246,7 @@ class Bitcoin::CLI
 
     input = gets.strip
     menu if input == '0'
-    Analyzer.analyze_trades symbol if input == '1'
+    Bitcoin::Analyzer.analyze_trades symbol if input == '1'
     analysis_menu(symbol)
   end
 
