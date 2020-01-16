@@ -1,5 +1,5 @@
 RSpec.describe Bitcoin::Trade do
-  it "creates new Trades" do
-    expect(Bitcoin::Trade.new).to eq(true)
+  it "can create a new Trade" do
+    expect(Bitcoin::Trade.new).to be_instance_of(Bitcoin::Trade)
   end
 end

@@ -2,11 +2,6 @@ class Bitcoin::OrderBook
 
   attr_accessor :side, :price, :size, :timestamp, :limit, :symbol
 
-  # Params:
-  # limit :	Number	Limit of Order Book levels
-  #         Default value: 100
-  #         Set 0 to view full list of Order Book levels.
-
   def self.new_from_object(object)
     o = Bitcoin::OrderBook.new
     o.size = object['size'].to_f
@@ -18,7 +13,7 @@ class Bitcoin::OrderBook
     o
   end
 
-  def self.all(symbol)
+  def self.all(symbol_name)
     data = JSON.parse RestClient.get "#{BASE}/public/orderbook/#{symbol}?limit=0"
     ask_orders = data['ask']
     bid_orders = data['bid']
@@ -26,12 +21,12 @@ class Bitcoin::OrderBook
     ask_orders.each{ |order|
       order[:side] = 'ask'
       order['timestamp'] = data['timestamp']
-      order[:symbol] = symbol
+      order[:symbol] = symbol_name
     }
     bid_orders.each{ |order|
       order[:side] = 'bid'
       order['timestamp'] = data['timestamp']
-      order[:symbol] = symbol
+      order[:symbol] = symbol_name
     }
 
     [ask_orders, bid_orders].flatten!.map{|order|

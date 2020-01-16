@@ -1,5 +1,5 @@
 RSpec.describe Bitcoin::Ssymbol do
-  it "has an id" do
-    expect(Bitcoin::Ssymbol.new('BTCUSD').id).to eq('BTCUSD')
+  it "can create a new Ssymbol" do
+    expect(Bitcoin::Ssymbol.new).to be_instance_of(Bitcoin::Ssymbol)
   end
 end

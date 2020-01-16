@@ -34,7 +34,7 @@ module Bitcoin
     r = "#{d[0]}-#{d[1]}-#{d[2]}T#{t[0]}:#{t[1]}:#{t[2]}Z"
     puts "Is this correct? #{d[0]}/#{d[1]}/#{d[2]}"
     puts "Y / N"
-    gets.strip.upcase == 'Y' ? return r : self.get_datetime
+    gets.strip.upcase == 'Y' ? r : self.get_datetime
   end
 
   # returns 2-element array with datetimes in ISO format
