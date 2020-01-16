@@ -14,7 +14,7 @@ class Bitcoin::OrderBook
   end
 
   def self.all(symbol_name)
-    data = JSON.parse RestClient.get "#{Bitcoin::BASE}/public/orderbook/#{symbol}?limit=0"
+    data = JSON.parse RestClient.get "#{Bitcoin::BASE}/public/orderbook/#{symbol_name}?limit=0"
     ask_orders = data['ask']
     bid_orders = data['bid']
 
