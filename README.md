@@ -11,6 +11,8 @@ Planned features:
   - Algotrading, arbitrage
   - UI
 
+Walkthrough of source code: https://youtu.be/TuTf84mZAEY
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -25,13 +27,11 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install bitcoin
+    $ gem install bitcoin-api
 
 ## Usage
 
 Run `bin/console` to play around, or `bin/bitcoin` to start the CLI.
-
-
 
 ## Development
 
@@ -41,13 +41,8 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/nichol88/bitcoin_api. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/bitcoin/blob/master/CODE_OF_CONDUCT.md).
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/nichol88/bitcoin_api.
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the Bitcoin project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/bitcoin/blob/master/CODE_OF_CONDUCT.md).
