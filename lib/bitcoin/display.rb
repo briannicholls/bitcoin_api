@@ -1,4 +1,4 @@
-class Display
+class Bitcoin::Display
 
   def self.list(array)
     numerize(array)

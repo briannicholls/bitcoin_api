@@ -1,18 +1,18 @@
 class Bitcoin::Currency
-  
+
   attr_accessor :id, :fullName, :crypto, :payinEnabled, :payinPaymentId,
       :payinConfirmations, :payoutEnabled, :payoutIsPaymentId, :transferEnabled,
       :delisted, :payoutFee
 
   def self.all
-    data = JSON.parse(RestClient.get("#{BASE}/public/currency"))
+    data = JSON.parse(RestClient.get("#{Bitcoin::BASE}/public/currency"))
     data.map{  |currency|
       Bitcoin::Currency.new_from_object(currency)
      }
   end
 
   def self.new_from_currency_name(name)
-    data = JSON.parse(RestClient.get("#{BASE}/public/currency/#{name}"))
+    data = JSON.parse(RestClient.get("#{Bitcoin::BASE}/public/currency/#{name}"))
     Bitcoin::Currency.new_from_object(data)
   end
 

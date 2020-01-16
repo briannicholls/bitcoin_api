@@ -4,7 +4,7 @@ class Bitcoin::Ssymbol
         :takeLiquidityRate, :provideLiquidityRate, :feeCurrency
 
   def self.all
-    data = JSON.parse(RestClient.get("#{BASE}/public/symbol"))
+    data = JSON.parse(RestClient.get("#{Bitcoin::BASE}/public/symbol"))
     data.map{ |ssymbol|
       Bitcoin::Ssymbol.new_from_object(ssymbol)
     }
@@ -24,7 +24,7 @@ class Bitcoin::Ssymbol
   end
 
   def self.new_from_symbol_name(symbol_name)
-    data = JSON.parse(RestClient.get("#{BASE}/public/symbol/#{symbol_name}"))
+    data = JSON.parse(RestClient.get("#{Bitcoin::BASE}/public/symbol/#{symbol_name}"))
     Bitcoin::Ssymbol.new_from_object(data)
   end
 

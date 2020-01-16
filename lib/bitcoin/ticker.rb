@@ -4,7 +4,7 @@ class Bitcoin::Ticker
         :timestamp, :symbol
 
   def self.new_from_symbol_name(symbol)
-    data = JSON.parse(RestClient.get("#{BASE}/public/ticker/#{symbol}"))
+    data = JSON.parse(RestClient.get("#{Bitcoin::BASE}/public/ticker/#{symbol}"))
     Bitcoin::Ticker.new_from_object(data)
   end
 
@@ -24,7 +24,7 @@ class Bitcoin::Ticker
   end
 
   def self.all
-    data = JSON.parse(RestClient.get("#{BASE}/public/ticker"))
+    data = JSON.parse(RestClient.get("#{Bitcoin::BASE}/public/ticker"))
     data.map{ |ticker|
       Bitcoin::Ticker.new_from_object(ticker)
     }
