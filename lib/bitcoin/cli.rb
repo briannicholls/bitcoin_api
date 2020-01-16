@@ -136,8 +136,10 @@ class Bitcoin::CLI
   end
 
   def order_book_menu(symbol, orders = nil)
-    orders = Bitcoin::OrderBook.all(symbol.id)
-    Bitcoin::Display.list_order_book(orders)
+    if !orders
+      orders = Bitcoin::OrderBook.all(symbol.id)
+      Bitcoin::Display.list_order_book(orders)
+    end
 
     order_book_menu_display
 
