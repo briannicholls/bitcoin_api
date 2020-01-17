@@ -4,6 +4,7 @@ require 'pry'
 require 'net/http'
 require 'uri'
 require 'time'
+require 'dotenv'
 
 
 #require_relative "./bitcoin/version"

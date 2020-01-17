@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-
+require 'dotenv/load'
 require './lib/bitcoin'
 
 Bitcoin::CLI.new
