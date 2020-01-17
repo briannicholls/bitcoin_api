@@ -2,6 +2,16 @@ class Bitcoin::OrderBook
 
   attr_accessor :side, :price, :size, :timestamp, :limit, :symbol
 
+  def display_details
+    puts <<-DOC
+    #{@symbol} #{@side.upcase} Order:
+    #{@price}
+    Quantity: #{@size}
+    #{@timestamp}
+
+    DOC
+  end
+  
   def self.new_from_object(object)
     o = Bitcoin::OrderBook.new
     o.size = object['size'].to_f
@@ -34,13 +44,5 @@ class Bitcoin::OrderBook
     }
   end
 
-  def display_details
-    puts <<-DOC
-    #{@symbol} #{@side.upcase} Order:
-    #{@price}
-    Quantity: #{@size}
-    #{@timestamp}
 
-    DOC
-  end
 end

@@ -14,7 +14,7 @@ class Bitcoin::CLI
     puts "* [1] Select Symbol"
     puts "* [2] View Currency Information"
     puts "* [3] View Tickers"
-    # puts "[4] User Dashboard (Auth Needed)"
+    puts "* [4] User Dashboard"
     puts " "
   end
 
@@ -59,7 +59,28 @@ class Bitcoin::CLI
 
   ### TODO: USER SUBMENU ###
   def user_menu
-    puts "Nothing here yet!"
+    user_menu_display
+
+    input = gets.strip
+    menu if input == '0'
+    Bitcoin::Account.show_balances if input == '1'
+    Bitcoin::Account.show_deposit_address if input == '2'
+    exit if input == 'exit'
+    user_menu
+  end
+
+  def user_menu_display
+    puts ''
+    puts 'Type "exit" to quit'
+    puts ''
+    puts '====== [User Menu] ======'
+    puts '| [0] Main Menu'
+    puts '| [1] View Account Balances'
+    puts '| [2] View Deposit Address...'
+    # puts "* [3] Order Menu" # Create New, Cancel, Get by ID, Get History
+    # puts "* [4] Trade Menu"
+    # puts "* [5] Transfer To / From Bank Account"
+    # puts '* [5] Transfer To / From Bank Account'
   end
 
   ### SYMBOL SUBMENUS ###

@@ -4,7 +4,6 @@ require 'pry'
 require 'net/http'
 require 'uri'
 require 'time'
-require 'dotenv'
 
 
 #require_relative "./bitcoin/version"
@@ -18,6 +17,7 @@ require_relative "./bitcoin/ssymbol.rb"
 require_relative "./bitcoin/candle.rb"
 require_relative "./bitcoin/ticker.rb"
 require_relative "./bitcoin/analyzer.rb"
+require_relative "./bitcoin/client/account.rb"
 
 
 module Bitcoin
