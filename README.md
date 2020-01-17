@@ -18,7 +18,7 @@ Walkthrough of source code: https://youtu.be/TuTf84mZAEY
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'bitcoin'
+gem 'bitcoin-api'
 ```
 
 And then execute:
