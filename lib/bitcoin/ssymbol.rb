@@ -1,13 +1,16 @@
 class Bitcoin::Ssymbol
 
-  attr_accessor :id, :baseCurrency, :quoteCurrency, :quantityIncrement, :tickSize,
-        :takeLiquidityRate, :provideLiquidityRate, :feeCurrency
+  attr_accessor :id, :baseCurrency, :quoteCurrency, :quantityIncrement, :tickSize, :takeLiquidityRate, :provideLiquidityRate, :feeCurrency
 
-  def self.all
-    data = JSON.parse(RestClient.get("#{Bitcoin::BASE}/public/symbol"))
-    data.map{ |ssymbol|
-      Bitcoin::Ssymbol.new_from_object(ssymbol)
-    }
+  def display_details
+    puts <<-DOC
+    ID: #{@id}
+    Base Currency: #{@baseCurrency} || Quote Currency: #{@quoteCurrency}
+    Quantity Increment: #{@quantityIncrement} || Tick Size: #{@tickSize}
+    Take Liquidity Rate: #{@takeLiquidityRate} || Provide Liquidity Rate: #{@provideLiquidityRate}
+    Fee Currency: #{@feeCurrency}
+
+    DOC
   end
 
   def self.new_from_object(data)
@@ -23,21 +26,16 @@ class Bitcoin::Ssymbol
     s
   end
 
+  def self.all
+    data = JSON.parse(RestClient.get("#{Bitcoin::BASE}/public/symbol"))
+    data.map{ |ssymbol|
+      Bitcoin::Ssymbol.new_from_object(ssymbol)
+    }
+  end
+
   def self.new_from_symbol_name(symbol_name)
     data = JSON.parse(RestClient.get("#{Bitcoin::BASE}/public/symbol/#{symbol_name}"))
     Bitcoin::Ssymbol.new_from_object(data)
-  end
-
-  def display_details
-    puts <<-DOC
-    ID: #{@id}
-    Base Currency: #{@baseCurrency} || Quote Currency: #{@quoteCurrency}
-    Quantity Increment: #{@quantityIncrement} || Tick Size: #{@tickSize}
-    Take Liquidity Rate: #{@takeLiquidityRate} || Provide Liquidity Rate: #{@provideLiquidityRate}
-    Fee Currency: #{@feeCurrency}
-
-    DOC
-
   end
 
 end

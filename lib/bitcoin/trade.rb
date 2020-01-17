@@ -12,7 +12,6 @@ class Bitcoin::Trade
     DOC
   end
 
-  # Create instance from hash/JSON
   def self.new_from_object(symbol_name, data)
     t = Bitcoin::Trade.new
     t.id = data['id']

@@ -1,7 +1,6 @@
 class Bitcoin::Ticker
 
-  attr_accessor :ask, :bid, :last, :open, :low, :high, :volume, :volumeQuote,
-        :timestamp, :symbol
+  attr_accessor :ask, :bid, :last, :open, :low, :high, :volume, :volumeQuote, :timestamp, :symbol
 
   def display_details
     puts <<-DOC
@@ -14,11 +13,6 @@ class Bitcoin::Ticker
     #{@timestamp}
 
     DOC
-  end
-  
-  def self.new_from_symbol_name(symbol)
-    data = JSON.parse(RestClient.get("#{Bitcoin::BASE}/public/ticker/#{symbol}"))
-    Bitcoin::Ticker.new_from_object(data)
   end
 
   def self.new_from_object(data)
@@ -34,6 +28,11 @@ class Bitcoin::Ticker
     t.timestamp = Time.parse(data['timestamp'])
     t.symbol = data['symbol']
     t
+  end
+
+  def self.new_from_symbol_name(symbol_name)
+    data = JSON.parse(RestClient.get("#{Bitcoin::BASE}/public/ticker/#{symbol_name}"))
+    Bitcoin::Ticker.new_from_object(data)
   end
 
   def self.all

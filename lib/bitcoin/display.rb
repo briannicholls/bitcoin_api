@@ -37,7 +37,7 @@ class Bitcoin::Display
   end
 
   private
-  # input array of hashes, and desired displayed attribute (string key)
+  # input array of hashes, and attribute to be displayed
   def self.numerize(array, attribute = nil)
     if attribute
       array.each_with_index{ |e, i| puts "#{i+1}. #{e.send("#{attribute}")}"}
