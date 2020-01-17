@@ -24,6 +24,8 @@ module Bitcoin
   class Error < StandardError; end
   # Your code goes here...
   BASE = "https://api.exchange.bitcoin.com/api/2"
+
+  # returns formatted datetime string
   def self.get_datetime
     puts "Enter Date (YYYY MM DD)"
     d = gets.strip
@@ -32,7 +34,7 @@ module Bitcoin
     d = d.split(" ")
     t = t.split(" ")
     r = "#{d[0]}-#{d[1]}-#{d[2]}T#{t[0]}:#{t[1]}:#{t[2]}Z"
-    puts "Is this correct? #{d[0]}/#{d[1]}/#{d[2]}"
+    puts "Is this correct? #{d[0]}/#{d[1]}/#{d[2]}, #{t[0]}:#{t[1]}:#{t[2]}"
     puts "Y / N"
     gets.strip.upcase == 'Y' ? r : self.get_datetime
   end
