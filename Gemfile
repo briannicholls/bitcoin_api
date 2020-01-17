@@ -9,4 +9,5 @@ gem "rest-client"
 gem "json"
 gem 'pry'
 gem 'http'
+gem 'dotenv'
 #gem 'time'
