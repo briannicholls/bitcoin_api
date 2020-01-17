@@ -12,6 +12,7 @@ class Bitcoin::Trade
     DOC
   end
 
+  # Create instance from hash/JSON
   def self.new_from_object(symbol_name, data)
     t = Bitcoin::Trade.new
     t.id = data['id']
@@ -30,6 +31,7 @@ class Bitcoin::Trade
     }
   end
 
+  # Input: currency pair and formatted date range. Output: array of trades from range
   def self.get_trades_in_range(symbol_name, timestamps = Bitcoin.get_datetimes_from_user)
     data = JSON.parse RestClient.get "#{Bitcoin::BASE}/public/trades/#{symbol_name}?limit=1000&sort=DESC&from=#{timestamps[0]}&till=#{timestamps[1]}"
     data.map{|e|

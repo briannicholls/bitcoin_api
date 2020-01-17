@@ -3,6 +3,19 @@ class Bitcoin::Ticker
   attr_accessor :ask, :bid, :last, :open, :low, :high, :volume, :volumeQuote,
         :timestamp, :symbol
 
+  def display_details
+    puts <<-DOC
+    #{@symbol}
+    Best Ask   : #{@ask.to_s.rjust(9)} || Best Bid: #{@bid}
+    Last Trade Price: #{@last}
+    Open: #{@open}
+    24-Hour Low: #{@low.to_s.rjust(9)} || 24-Hour High: #{@high}
+    Total 24-Hour Volume (Base): #{@volume}  (Quote): #{@volumeQuote}
+    #{@timestamp}
+
+    DOC
+  end
+  
   def self.new_from_symbol_name(symbol)
     data = JSON.parse(RestClient.get("#{Bitcoin::BASE}/public/ticker/#{symbol}"))
     Bitcoin::Ticker.new_from_object(data)
@@ -30,16 +43,5 @@ class Bitcoin::Ticker
     }
   end
 
-  def display_details
-    puts <<-DOC
-    #{@symbol}
-    Best Ask   : #{@ask.to_s.rjust(9)} || Best Bid: #{@bid}
-    Last Trade Price: #{@last}
-    Open: #{@open}
-    24-Hour Low: #{@low.to_s.rjust(9)} || 24-Hour High: #{@high}
-    Total 24-Hour Volume (Base): #{@volume}  (Quote): #{@volumeQuote}
-    #{@timestamp}
 
-    DOC
-  end
 end
