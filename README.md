@@ -29,6 +29,17 @@ Or install it yourself as:
 
     $ gem install bitcoin-api
 
+## Add API Key / Secret
+
+Get your API Key and secret from your account settings at https://exchange.bitcoin.com/settings/api-keys.
+
+Create a file named `.env` in root directory. The contents should look like this:
+
+```ruby
+API_KEY={your API key (no quotes or brackets)}
+SECRET={your Secret key (no quotes or brackets)}
+```
+
 ## Usage
 
 Run `bin/console` to play around, or `bin/bitcoin` to start the CLI.
