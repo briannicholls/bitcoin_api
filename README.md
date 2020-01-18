@@ -13,6 +13,8 @@ Planned features:
 
 Walkthrough of source code: https://youtu.be/TuTf84mZAEY
 
+Blog Post: https://briannicholls.home.blog/2020/01/18/cli-project-bitcoin-com-crypto-api/
+
 ## Installation
 
 Add this line to your application's Gemfile:
