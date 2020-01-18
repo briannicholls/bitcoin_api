@@ -31,7 +31,7 @@ class Bitcoin::Candle
     }
   end
 
-  def self.get_from_range(symbol_name, timestamps = Bitcoin.get_datetimes_from_user)
+  def self.get_from_range(symbol_name, timestamps = Bitcoin::Analyzer.get_datetimes_from_user)
     data = JSON.parse RestClient.get "#{Bitcoin::BASE}/public/candles/#{symbol_name}?limit=1000&sort=DESC&from=#{timestamps[0]}&till=#{timestamps[1]}"
     data.map{|e|
       Bitcoin::Trade.new_from_object(symbol_name, e)
