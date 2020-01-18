@@ -16,18 +16,30 @@ Walkthrough of source code: https://youtu.be/TuTf84mZAEY
 ## Installation
 
 Add this line to your application's Gemfile:
-
-```ruby
-gem 'bitcoin-api'
-```
-
+    ```ruby
+    gem 'bitcoin-api'
+    ```
 And then execute:
-
+    ```
     $ bundle install
+    ```
 
 Or install it yourself as:
 
     $ gem install bitcoin-api
+
+
+## Usage
+
+In your code use:
+
+    ```ruby
+    require 'bitcoin'
+
+    Bitcoin::CLI.new # to start the CLI
+    ```
+
+If you've cloned the repo, run `bin/console` to play around, or `bin/bitcoin` to start the CLI.
 
 ## Add API Key / Secret
 
@@ -39,10 +51,6 @@ Create a file named `.env` in root directory. The contents should look like this
 API_KEY={your API key (no quotes or brackets)}
 SECRET={your Secret key (no quotes or brackets)}
 ```
-
-## Usage
-
-Run `bin/console` to play around, or `bin/bitcoin` to start the CLI.
 
 ## Development
 
