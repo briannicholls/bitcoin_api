@@ -35,7 +35,7 @@ module Bitcoin
     d = d.split(" ")
     t = t.split(" ")
     r = "#{d[0]}-#{d[1]}-#{d[2]}T#{t[0]}:#{t[1]}:#{t[2]}Z"
-    puts "Is this correct? #{d[0]}/#{d[1]}/#{d[2]}, #{t[0]}:#{t[1]}:#{t[2]}"
+    puts "Is this correct? #{d[0]}/#{d[1]}/#{d[2]}, #{t[0].to_s}:#{t[1].to_s}:#{t[2].to_s}"
     puts "Y / N"
     gets.strip.upcase == 'Y' ? r : self.get_datetime
   end
