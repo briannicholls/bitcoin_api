@@ -1,6 +1,6 @@
 class Bitcoin::Candle
 
-  attr_accessor :timestamp, :open, :close, :min, :max, :volume, :volumeQuote
+  attr_accessor :timestamp, :open, :close, :min, :max, :volume, :volumeQuote, :interval
 
   def display_details
     puts <<-DOC
@@ -21,6 +21,7 @@ class Bitcoin::Candle
     c.max = object['max']
     c.volume = object['volume']
     c.volumeQuote = object['volumeQuote']
+    puts "candle retreived ()"
     c
   end
 
@@ -31,11 +32,12 @@ class Bitcoin::Candle
     }
   end
 
-  def self.get_from_range(symbol_name, timestamps = Bitcoin::Analyzer.get_datetimes_from_user)
-    data = JSON.parse RestClient.get "#{Bitcoin::BASE}/public/candles/#{symbol_name}?limit=1000&sort=DESC&from=#{timestamps[0]}&till=#{timestamps[1]}"
-    data.map{|e|
-      Bitcoin::Trade.new_from_object(symbol_name, e)
-    }
+  # returns array of candles between two datetimes
+  def self.new_from_range(symbol_name, timestamps, interval = '30M')
+    url = "#{Bitcoin::BASE}/public/candles/#{symbol_name}?limit=1000&sort=DESC"
+    params = "&from=#{timestamps[0]}&till=#{timestamps[1]}&period=#{interval}"
+    params = params.gsub(':', '%3A')
+    data = JSON.parse RestClient.get("#{url}#{params}")
+    data.map { |e| Bitcoin::Candle.new_from_object(e) }
   end
-
 end

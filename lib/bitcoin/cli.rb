@@ -271,6 +271,7 @@ class Bitcoin::CLI
     menu if input == '0'
     symbol_menu(symbol) if input == '00'
     Bitcoin::Analyzer.analyze_trades symbol if input == '1'
+    Bitcoin::Analyzer.analyze_candles symbol if input == '2'
     analysis_menu(symbol)
   end
 
@@ -282,6 +283,7 @@ class Bitcoin::CLI
     puts "/  [0] Main Menu"
     puts "/ [00] Symbol Menu"
     puts "/  [1] Analyze Trades Within Range..."
+    puts "/  [2] Analyze Candles Within Range..."
     puts ""
   end
 

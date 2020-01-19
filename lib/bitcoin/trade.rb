@@ -31,7 +31,7 @@ class Bitcoin::Trade
   end
 
   # Input: currency pair and formatted date range. Output: array of trades from range
-  def self.get_trades_in_range(symbol_name, timestamps = Bitcoin::Analyzer.get_datetimes_from_user)
+  def self.get_trades_in_range(symbol_name, timestamps = nil)
     data = JSON.parse RestClient.get "#{Bitcoin::BASE}/public/trades/#{symbol_name}?limit=1000&sort=DESC&from=#{timestamps[0]}&till=#{timestamps[1]}"
     data.map{|e|
       Bitcoin::Trade.new_from_object(symbol_name, e)

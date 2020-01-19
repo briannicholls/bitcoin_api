@@ -28,6 +28,7 @@ class Bitcoin::Display
     candles.each_with_index{ |candle, i|
       puts "#{(i+1).to_s.rjust(4)}. #{candle.timestamp} [#{candle.open.rjust(11)} -> #{candle.close.rjust(11)}] [#{candle.min.rjust(11)} - #{candle.max.rjust(11)}] vol: #{candle.volume.rjust(11)}"
     }
+    # insert key at top and bottom of list
   end
 
   def self.list_tickers(tickers)
