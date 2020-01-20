@@ -21,7 +21,7 @@ class Bitcoin::Candle
     c.max = object['max']
     c.volume = object['volume']
     c.volumeQuote = object['volumeQuote']
-    puts "candle retreived ()"
+    #puts "candle retreived ()"
     c
   end
 

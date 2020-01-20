@@ -2,7 +2,8 @@ class Bitcoin::Analyzer
 
   # input Symbol object, prints results
   def self.analyze_trades(symbol)
-    trades = Bitcoin::Trade.get_trades_in_range(symbol.id, get_datetimes_from_user)
+    trades = Bitcoin::Trade.get_trades_in_range(symbol.id,
+                                                get_datetimes_from_user)
     puts ''
     puts '///// [Analysis Results] /////'
     puts '|'
@@ -14,15 +15,10 @@ class Bitcoin::Analyzer
     puts "| #{get_max(trades, :quantity).display_details}"
   end
 
-  def self.avg(object_array, attribute)
-    num = object_array.length
-    sum = object_array.inject(0) { |memo, e| memo + e.send("#{attribute}").to_i}
-    return sum.to_f / num.to_f
-  end
-
   def self.analyze_candles(symbol)
     candles = Bitcoin::Candle.new_from_range(symbol.id, get_datetimes_from_user,
                                              interval_from_user)
+    return "No candles found! :(" if !candles
     puts ''
     puts '///// [Analysis Results] /////'
     puts ''
@@ -35,6 +31,8 @@ class Bitcoin::Analyzer
     puts '| Period with lowest volume:'
     puts "| #{get_min(candles, :volume).display_details}"
     puts "| Average Volume: #{avg(candles, 'volume')}"
+    puts '| Avg Open, Close, Min and Max:'
+    puts "| #{candle_averages(candles)}"
   end
 
   # returns ISO formatted datetime string from user
@@ -53,31 +51,37 @@ class Bitcoin::Analyzer
     from = get_datetime
     puts '*** Enter End Time *** (2014 or later)'
     to = get_datetime
-    return [from, to]
+    [from, to]
   end
 
-  # calculate moving average between two dates
-  def self.moving_average(timestamps, candles)
-
+  # calculate moving averages of candles array
+  # return: [ open, close, min, max]
+  def self.candle_averages(candles)
+    result = [0, 0, 0, 0]
+    candles.each do |candle|
+      result[0] += candle.open.to_f
+      result[1] += candle.close.to_f
+      result[2] += candle.min.to_f
+      result[3] += candle.max.to_f
+    end
+    result.map { |e| e / candles.length }
   end
 
-  # calculate ave volume between two dates
-  def avg_volume(timestamps, candles)
-
+  # calculate avg of attribute
+  def self.avg(object_array, attribute)
+    num = object_array.length
+    sum = object_array.inject(0) { |memo, e| memo + e.send("#{attribute}").to_i}
+    sum.to_f / num.to_f
   end
 
   # returns object with largest attribute
   def self.get_max(object_array, attribute = :price)
-    object_array.max_by{ |e|
-      e.send("#{attribute}")
-    }
+    object_array.max_by{ |e| e.send("#{attribute}") }
   end
 
   # returns object with smallest attribute
   def self.get_min(object_array, attribute = :price)
-    object_array.min_by{ |e|
-      e.send("#{attribute}")
-    }
+    object_array.min_by{ |e| e.send("#{attribute}") }
   end
 
   # returns time in array format ['HH', 'MM', 'SS']
@@ -103,10 +107,10 @@ class Bitcoin::Analyzer
   end
 
   def self.interval_from_user
-    puts "Enter time interval. Accepted values:"
-    puts "  M1 (one minute), M3, M5, M15, M30, "
-    puts "  H1 (one hour), H4, "
-    puts "  D1 (one day), D7, "
+    puts 'Enter time interval. Accepted values:'
+    puts '  M1 (one minute), M3, M5, M15, M30, '
+    puts '  H1 (one hour), H4, '
+    puts '  D1 (one day), D7, '
     puts '  1M (one month)'
     valid = ['M1', 'M3', 'M5', 'M15', 'M30', 'H1', 'H4', 'D1', 'D7', '1M']
     input = gets.strip
