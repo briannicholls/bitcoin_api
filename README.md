@@ -1,3 +1,5 @@
+https://badge.fury.io/rb/bitcoin-api.svg
+
 # Bitcoin
 
 This is a CLI using the bitcoin.com exchange API to view market data and provide limited analysis.
