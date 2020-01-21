@@ -1,4 +1,4 @@
-https://badge.fury.io/rb/bitcoin-api.svg
+[![Gem Version](https://badge.fury.io/rb/bitcoin-api.svg)](https://badge.fury.io/rb/bitcoin-api)
 
 # Bitcoin
 
