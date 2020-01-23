@@ -2,9 +2,17 @@ class Bitcoin::Ticker
 
   attr_accessor :ask, :bid, :last, :open, :low, :high, :volume, :volumeQuote, :timestamp, :symbol
 
+  def ask=(value)
+    @ask = value
+  end
+
+  def ask
+    @ask
+  end
+
   def display_details
     puts <<-DOC
-    #{@symbol}
+    #{self.symbol}
     Best Ask   : #{@ask.to_s.rjust(9)} || Best Bid: #{@bid}
     Last Trade Price: #{@last}
     Open: #{@open}

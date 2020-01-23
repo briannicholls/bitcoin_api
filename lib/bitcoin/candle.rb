@@ -21,7 +21,6 @@ class Bitcoin::Candle
     c.max = object['max']
     c.volume = object['volume']
     c.volumeQuote = object['volumeQuote']
-    #puts "candle retreived ()"
     c
   end
 
@@ -38,6 +37,13 @@ class Bitcoin::Candle
     params = "&from=#{timestamps[0]}&till=#{timestamps[1]}&period=#{interval}"
     params = params.gsub(':', '%3A')
     data = JSON.parse RestClient.get("#{url}#{params}")
-    data.map { |e| Bitcoin::Candle.new_from_object(e) }
+    if !data || data.empty?
+      puts ''
+      puts '*** No data found! Press enter to continue. ***'
+      gets
+      return nil
+    else
+      data.map { |e| Bitcoin::Candle.new_from_object(e) }
+    end
   end
 end

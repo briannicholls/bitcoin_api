@@ -7,7 +7,6 @@ require 'time'
 
 # require_relative "./bitcoin/version"
 require_relative './bitcoin/version.rb'
-require_relative './bitcoin/display.rb'
 require_relative './bitcoin/cli.rb'
 require_relative './bitcoin/currency.rb'
 require_relative './bitcoin/order_book.rb'

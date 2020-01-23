@@ -61,6 +61,21 @@ class Bitcoin::CLI
   def user_menu
     user_menu_display
 
+    if !ENV['API_KEY']
+      puts ''
+      puts "Missing API KEY in your .env file! See README to learn how to add it."
+      puts "Press enter to return to main menu."
+      gets.strip
+      menu
+    end
+    if !ENV['SECRET']
+      puts ''
+      puts "Missing SECRET in your .env file. See README to learn how to add"
+      puts "your SECRET KEY. Press enter to return to main menu."
+      gets.strip
+      menu
+    end
+
     input = gets.strip
     menu if input == '0'
     Bitcoin::Account.show_balances if input == '1'
@@ -88,7 +103,7 @@ class Bitcoin::CLI
 
     # display list & get symbol if it hasn't been selected yet
     if !symbol
-      list = Bitcoin::Display.list_by_id(Bitcoin::Ssymbol.all)
+      list = list_by_id(Bitcoin::Ssymbol.all)
       selection = choose(list) #
       menu if selection == -2
       symbol_menu if selection == -1
@@ -126,9 +141,8 @@ class Bitcoin::CLI
 
   def trade_menu(symbol, trades_array = nil)
     if !trades_array
-      # list all trades for symbol if first time
       trades = Bitcoin::Trade.all(symbol.id)
-      Bitcoin::Display.list_trades(trades)
+      self.list_trades(trades)
     end
 
     trade_menu_display
@@ -145,6 +159,12 @@ class Bitcoin::CLI
     trade_menu(symbol, trades)
   end
 
+  def list_trades(trades)
+    trades.each_with_index{ |trade, i|
+      puts "#{(i+1).to_s.rjust(4)}. #{trade.timestamp.strftime("%Y-%m-%d %H:%M:%S")} #{trade.side.rjust(4)} #{trade.price}"
+    }
+  end
+
   def trade_menu_display
     puts ""
     puts " Type 'exit' to quit"
@@ -159,7 +179,7 @@ class Bitcoin::CLI
   def order_book_menu(symbol, orders = nil)
     if !orders
       orders = Bitcoin::OrderBook.all(symbol.id)
-      Bitcoin::Display.list_order_book(orders)
+      self.list_order_book(orders)
     end
 
     order_book_menu_display
@@ -185,10 +205,16 @@ class Bitcoin::CLI
     puts ""
   end
 
+  def list_order_book(orderbook)
+    orderbook.each_with_index{ |order, i|
+      puts "#{(i+1).to_s.rjust(4)}. #{order.timestamp.strftime("%Y-%m-%d %H:%M:%S")}:  #{order.side.upcase} - Order Size: #{order.size.to_s.rjust(12)}, Price: #{order.price.to_s.rjust(12)}"
+    }
+  end
+
   def candles_menu(symbol, candles = nil)
     if !candles
       candles = Bitcoin::Candle.all(symbol.id)
-      Bitcoin::Display.list_candles(candles)
+      list_candles(candles)
     end
 
     candles_menu_display
@@ -212,10 +238,17 @@ class Bitcoin::CLI
     puts ""
   end
 
+  def list_candles(candles)
+    candles.each_with_index{ |candle, i|
+      puts "#{(i+1).to_s.rjust(4)}. #{candle.timestamp} [#{candle.open.rjust(11)} -> #{candle.close.rjust(11)}] [#{candle.min.rjust(11)} - #{candle.max.rjust(11)}] vol: #{candle.volume.rjust(11)}"
+    }
+    # to do: insert key at top and bottom of list
+  end
+
   ### CURRENCY SUBMENU ###
   def currency_menu(list = nil)
     if !list
-      list = Bitcoin::Display.list_by_id(Bitcoin::Currency.all)
+      list = list_by_id(Bitcoin::Currency.all)
     end
     currency_menu_display
     selection = choose(list)
@@ -239,7 +272,7 @@ class Bitcoin::CLI
   ### TICKER SUBMENU ###
   def ticker_menu(list = nil)
     if !list
-      list = Bitcoin::Display.list_tickers(Bitcoin::Ticker.all)
+      list = list_tickers(Bitcoin::Ticker.all)
     end
 
     ticker_menu_display
@@ -260,6 +293,12 @@ class Bitcoin::CLI
     puts "* [0] Main Menu"
     puts "* [#] Select Entry to View Details"
     puts ""
+  end
+
+  def list_tickers(tickers)
+    tickers.each_with_index{ |ticker, i|
+      puts "#{(i+1).to_s.rjust(4)}. #{ticker.symbol}"
+    }
   end
 
   ### ANALYSIS SUBMENU ###
@@ -287,4 +326,23 @@ class Bitcoin::CLI
     puts ""
   end
 
+  def list(array)
+    numerize(array)
+  end
+
+  def list_by_symbol(array)
+    numerize(array, :symbol)
+  end
+
+  def list_by_id(array)
+    numerize(array, :id)
+  end
+
+  def numerize(array, attribute = nil)
+    if attribute
+      array.each_with_index{ |e, i| puts "#{i+1}. #{e.send("#{attribute}")}"}
+    else
+      array.each_with_index{ |e, i| puts "#{i+1}. #{e}"}
+    end
+  end
 end

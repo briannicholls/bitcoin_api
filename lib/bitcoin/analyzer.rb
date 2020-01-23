@@ -4,35 +4,47 @@ class Bitcoin::Analyzer
   def self.analyze_trades(symbol)
     trades = Bitcoin::Trade.get_trades_in_range(symbol.id,
                                                 get_datetimes_from_user)
-    puts ''
-    puts '///// [Analysis Results] /////'
-    puts '|'
-    puts '| Trade with highest price:'
-    puts "| #{get_max(trades).display_details}"
-    puts '| Trade with lowest price:'
-    puts "| #{get_min(trades).display_details}"
-    puts '| Largest trade:'
-    puts "| #{get_max(trades, :quantity).display_details}"
+    if trades
+      puts ''
+      puts '///// [Analysis Results] /////'
+      puts '|'
+      puts '| Trade with highest price:'
+      puts "| #{get_max(trades).display_details}"
+      puts '| Trade with lowest price:'
+      puts "| #{get_min(trades).display_details}"
+      puts '| Largest trade:'
+      puts "| #{get_max(trades, :quantity).display_details}"
+    end
   end
 
   def self.analyze_candles(symbol)
     candles = Bitcoin::Candle.new_from_range(symbol.id, get_datetimes_from_user,
                                              interval_from_user)
-    return "No candles found! :(" if !candles
-    puts ''
-    puts '///// [Analysis Results] /////'
-    puts ''
-    puts "Got #{candles.length} candles from #{candles.last.timestamp} - #{candles.first.timestamp}"
-    puts '|'
-    puts '| Period with highest price:'
-    puts "| #{get_max(candles, :max).display_details}"
-    puts '| Period with lowest open:'
-    puts "| #{get_min(candles, :open).display_details}"
-    puts '| Period with lowest volume:'
-    puts "| #{get_min(candles, :volume).display_details}"
-    puts "| Average Volume: #{avg(candles, 'volume')}"
-    puts '| Avg Open, Close, Min and Max:'
-    puts "| #{candle_averages(candles)}"
+    if candles
+      puts ''
+      puts '///// [Analysis Results] /////'
+      puts ''
+      puts "Got #{candles.length} candles from #{candles.last.timestamp} - #{candles.first.timestamp}"
+      puts '|'
+      puts '| Period with highest price:'
+      puts "| #{get_max(candles, :max).display_details}"
+      puts '| Period with lowest open:'
+      puts "| #{get_min(candles, :open).display_details}"
+      puts '| Period with lowest volume:'
+      puts "| #{get_min(candles, :volume).display_details}"
+      puts "| Average Volume: #{avg(candles, 'volume')}"
+      puts '| Avg Open, Close, Min and Max:'
+      puts "| #{candle_averages(candles)}"
+    end
+  end
+
+  # returns 2-element array with formatted datetimes
+  def self.get_datetimes_from_user
+    puts '*** Enter Start Time *** (2014 or later)'
+    from = get_datetime
+    puts '*** Enter End Time *** (2014 or later)'
+    to = get_datetime
+    [from, to]
   end
 
   # returns ISO formatted datetime string from user
@@ -45,13 +57,28 @@ class Bitcoin::Analyzer
     gets.strip.upcase == 'Y' ? r : get_datetime
   end
 
-  # returns 2-element array with formatted datetimes
-  def self.get_datetimes_from_user
-    puts '*** Enter Start Time *** (2014 or later)'
-    from = get_datetime
-    puts '*** Enter End Time *** (2014 or later)'
-    to = get_datetime
-    [from, to]
+  # returns time in array format ['HH', 'MM', 'SS']
+  def self.time_from_user
+    puts 'Enter Time (24-hour format) (hh mm ss)'
+    t = gets.strip.split(' ')
+    if !t || t.length != 3 || !t[0].to_i.between?(0, 23) || !t[1].to_i.between?(0, 59) || !t[2].to_i.between?(0, 59) || t[0].length != 2 || t[1].length != 2 || t[2].length != 2
+      puts 'Invalid time. Try Again'
+      time_from_user
+    else
+      t
+    end
+  end
+
+  # returns date in array format ['YYYY', 'MM', 'DD']
+  def self.date_from_user
+    puts 'Enter Year (YYYY MM DD)'
+    d = gets.strip.split(' ')
+    if !d || d.length != 3 || d[0].to_i < 2014 || !d[1].to_i.between?(1, 12) || !d[2].to_i.between?(1, 31) || d[0].length != 4 || d[1].length != 2 || d[2].length != 2
+      puts 'Invalid Date. Try Again'
+      date_from_user
+    else
+      d
+    end
   end
 
   # calculate moving averages of candles array
@@ -82,28 +109,6 @@ class Bitcoin::Analyzer
   # returns object with smallest attribute
   def self.get_min(object_array, attribute = :price)
     object_array.min_by{ |e| e.send("#{attribute}") }
-  end
-
-  # returns time in array format ['HH', 'MM', 'SS']
-  def self.time_from_user
-    puts 'Enter Time (24-hour format) (hh mm ss)'
-    t = gets.strip.split(' ')
-    if !t[0].to_i.between?(0, 23) || !t[1].to_i.between?(0, 59) || !t[2].to_i.between?(0, 59) || t[0].length != 2 || t[1].length != 2 || t[2].length != 2
-      puts 'Invalid time.'
-      time_from_user
-    end
-    t
-  end
-
-  # returns date in array format ['YYYY', 'MM', 'DD']
-  def self.date_from_user
-    puts 'Enter Year (YYYY MM DD)'
-    d = gets.strip.split(' ')
-    if d[0].to_i < 2014 || !d[1].to_i.between?(1, 12) || !d[2].to_i.between?(1, 31) || d[0].length != 4 || d[1].length != 2 || d[2].length != 2
-      puts 'Invalid Date. Try Again'
-      date_from_user
-    end
-    d
   end
 
   def self.interval_from_user
