@@ -6,6 +6,7 @@ class Bitcoin::CLI
   end
 
   def main_menu_display
+    system('clear')
     puts ""
     puts "Type 'exit' to quit"
     puts ""
