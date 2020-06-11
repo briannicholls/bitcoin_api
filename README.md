@@ -29,7 +29,7 @@ Or install it yourself as:
 
 To start the CLI, navigate to the root directory in your terminal and run `bin/bitcoin`
 
-You can also run `bin/console` to play around. For the API documentation, [See Here](https://www.rubydoc.info/gems/bitcoin-api/)
+You can also run `bin/console` to play around. For the API documentation, [See Here](https://www.rubydoc.info/gems/bitcoin-api/0.1.1)
 
 ## Add API Key / Secret
 
